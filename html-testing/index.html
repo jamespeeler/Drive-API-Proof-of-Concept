@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Branch Inventory Delivery Service</title>
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section class="container">
+        <section class="menuContainer">
+
+<!-- This section of the site is for selecting which store is requesting delivery 
+     & which store will be supplying the delivery   
+-->
+
+            <section class="storeLocationsContainer">
+
+                <section class="currentLocation locationSelector">
+
+                    <span>Where do you need the delivery?</span>
+                    <select name="currentLocationSelect" id="currentLocationSelect">
+                        <option value="branch1">Branch 1</option>
+                        <option value="branch2">Branch 2</option>
+                        <option value="branch3">Branch 3</option>
+                    </select>
+
+                </section>
+        
+                <section class="requestingLocation locationSelector">
+
+                    <span>Where are the items coming from?</span>
+                    <select name="currentLocationSelect" id="currentLocationSelect">
+                        <option value="branch1">Branch 1</option>
+                        <option value="branch2">Branch 2</option>
+                        <option value="branch3">Branch 3</option>
+                    </select>
+
+                </section>
+    
+            </section>
+
+<!-- This section of the app is where the client selects which items need to be delivered -->
+    
+            <section class="itemsContainer">
+    
+                <section class="itemsToRequest">
+                    
+                </section>
+    
+                <section class="itemsQuantity">
+                </section>
+    
+            </section>
+
+            <section class="orderButtonContainer">
+                <section class="placeOrder">
+                </section>
+            </section>
+
+
+    
+        </section>
+    </section>
+</body>
+</html>
