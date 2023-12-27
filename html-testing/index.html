@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Branch Inventory Delivery Service</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="normalize.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,7 +14,7 @@
     <section class="container">
         <section class="menuContainer">
 
-<!-- This section of the site is for selecting which store is requesting delivery 
+<!-- This section of the app is for selecting which store is requesting delivery 
      & which store will be supplying the delivery   
 -->
 
@@ -19,7 +22,7 @@
 
                 <section class="currentLocation locationSelector">
 
-                    <span>Where do you need the delivery?</span>
+                    <span class="sectionLabel">Where do you need the delivery?</span>
                     <select name="currentLocationSelect" id="currentLocationSelect">
                         <option value="branch1">Branch 1</option>
                         <option value="branch2">Branch 2</option>
@@ -30,7 +33,7 @@
         
                 <section class="requestingLocation locationSelector">
 
-                    <span>Where are the items coming from?</span>
+                    <span class="sectionLabel">Where are the items coming from?</span>
                     <select name="currentLocationSelect" id="currentLocationSelect">
                         <option value="branch1">Branch 1</option>
                         <option value="branch2">Branch 2</option>
@@ -42,12 +45,52 @@
             </section>
 
 <!-- This section of the app is where the client selects which items need to be delivered -->
-    
+
             <section class="itemsContainer">
     
                 <section class="itemsToRequest itemsSelector">
 
-                        <span>What does your store need?</span>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Select</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Milk</td>
+                                <td><input type="checkbox" name="item" class="item"></td>
+                                <td><input type="number" placeholder="Leave blank if 0"></td>
+                            </tr>
+                            <tr>
+                                <td>Cups</td>
+                                <td><input type="checkbox" name="item" class="item"></td>
+                                <td><input type="number" placeholder="Leave blank if 0"></td>
+                            </tr>
+                            <tr>
+                                <td>Lids</td>
+                                <td><input type="checkbox" name="item" class="item"></td>
+                                <td><input type="number" placeholder="Leave blank if 0"></td>
+                            </tr>
+                            <tr>
+                                <td>Straws</td>
+                                <td><input type="checkbox" name="item" class="item"></td>
+                                <td><input type="number" placeholder="Leave blank if 0"></td>
+                            </tr>
+                            <tr>
+                                <td>Napkins</td>
+                                <td><input type="checkbox" name="item" class="item"></td>
+                                <td><input type="number" placeholder="Leave blank if 0"></td>
+                            </tr>
+                                                        
+                        </tbody>
+                    </table>
+
+
+
+                        <!-- <span class="sectionLabel">What does your store need?</span>
               
                         <div class="clothing-option">
                           <input type="checkbox" name="items" value="9900" class="item"/>
@@ -77,16 +120,21 @@
                         <div class="item-option">
                           <input type="checkbox" name="items" value="1900" class="item"/>
                           <label for="items">To-Go Bags</label>
-                        </div>
+                        </div> -->
                     
                 </section>
     
-                <section class="itemsQuantity itemsSelector">
-                    <span>How many items in total do you need? (3 gallons of milk, 2 packs of cups, etc.)</span>
-                    <input type="number" max="10">
-                </section>
+                <!-- <section class="itemsQuantity itemsSelector">
+                    <span class="sectionLabel">How many items in total do you need? (3 gallons of milk, 2 packs of cups, etc.)</span>
+
+                    <form action="">
+                        <input type="number" max="10" placeholder="Max 10">
+                    </form>
+                </section> -->
     
             </section>
+
+<!-- This section of the app is a button -->
 
             <section class="orderButtonContainer">
                 <section class="placeOrder">
@@ -94,8 +142,6 @@
                 </section>
             </section>
 
-
-    
         </section>
     </section>
 </body>

@@ -18,10 +18,12 @@
 
 * {
     box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
 }
 
-section {
-    border: 2px solid black;
+.sectionLabel {
+    font-weight: bold;
+    font-size: 1.2rem;
 }
 
 
@@ -43,19 +45,25 @@ STORE LOCATIONS SECTION
 ***************************/
 
 .storeLocationsContainer {
-    height: 50vh;
+    height:18vh;
     display: flex;
     margin-bottom: 0.5%;
     border: none;
 }
 
 .currentLocation {
-    border: 2px solid green;
+    /* border: 2px solid green; */
     flex: 1;
 }
 
+select {
+    width: 70%;
+    height: 7vh;
+    text-align: center;
+}
+
 .requestingLocation {
-    border: 2px solid blue;
+    /* border: 2px solid blue; */
     flex: 1;
 }
 
@@ -74,25 +82,44 @@ SELECT ITEMS SECTION
 ***************************/
 
 .itemsContainer {
-    height: 30vh;
+    height: 18vh;
     margin-bottom: 0.5%;
     display: flex;
     border: none;
 }
 
 .itemsToRequest {
-    border: 2px solid red;
-    flex: 2;
-}
-
-.itemsQuantity {
-    border: 2px solid purple;
+    /* border: 2px solid red; */
     flex: 1;
 }
+
+table {
+    margin: auto;
+}
+
+th {
+    text-align: left;
+}
+
+/* td,
+th {
+    width: 30%;
+} */
+
+/* .itemsQuantity {
+    border: 2px solid purple;
+    flex: 1;
+    flex-wrap: wrap;
+} */
 
 .itemsSelector {
     margin: auto;
 }
+
+form, input {
+    min-width: 0;
+}
+
 
 /***************************
 ORDER BUTTON SECTION
@@ -101,14 +128,71 @@ ORDER BUTTON SECTION
 .orderButtonContainer{
     height: 15vh;
     border: none;
+    margin-top: 13%;
 }
 
 .placeOrder {
     height: 100%;
-    border: 2px solid yellow;
+    /* border: 2px solid yellow; */
 }
 
 button {
     height: 100%;
     width: 100%;
 }
+
+/* 905px */
+
+/***************************
+MEDIA QUERIES
+***************************/
+
+
+
+/* @media screen and (max-width: 905px){
+    
+    button {
+        margin-top: 3%;
+    }
+
+}
+
+@media screen and (max-width: 745px){
+    
+    button {
+        margin-top: 8%;
+    }
+
+}
+
+@media screen and (max-width: 675px){
+    
+    button {
+        margin-top: 13%;
+    }
+
+}
+
+@media screen and (max-width: 667px){
+    
+    button {
+        margin-top: 18%;
+    }
+
+}
+
+@media screen and (max-width: 645px){
+    
+    button {
+        margin-top: 22%;
+    }
+
+}
+
+@media screen and (max-width: 613px){
+    
+    button {
+        margin-top: 28%;
+    }
+
+} */
