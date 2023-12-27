@@ -90,6 +90,10 @@ SELECT ITEMS SECTION
     flex: 1;
 }
 
+.itemsSelector {
+    margin: auto;
+}
+
 /***************************
 ORDER BUTTON SECTION
 ***************************/
@@ -102,4 +106,9 @@ ORDER BUTTON SECTION
 .placeOrder {
     height: 100%;
     border: 2px solid yellow;
+}
+
+button {
+    height: 100%;
+    width: 100%;
 }
