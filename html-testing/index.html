@@ -17,11 +17,13 @@
 <!-- This section of the app is for selecting which store is requesting delivery 
      & which store will be supplying the delivery   
 -->
+            <!-- This is the container for the Store Locations section, it provides structure for both the "store location" dropdown menus and the address spans -->
+            <section class="storeLocationsContainer"> 
 
-            <section class="storeLocationsContainer">
-
+                <!-- This is the container for the "Current Location" subsection, it provides structure for the "current location" dropdown menu and the address spans -->
                 <section class="currentLocation locationSelector">
 
+                    <!-- This is the dropdown menu where you select your current location -->
                     <span class="sectionLabel">Where do you need the delivery?</span>
                     <select name="currentLocationSelect" id="currentLocationSelect">
                         <option value="branch1">Branch 1</option>
@@ -29,10 +31,19 @@
                         <option value="branch3">Branch 3</option>
                     </select>
 
+                    <!-- This is the section where the current address is shown to the user to confirm the selection -->
+                    <section class="currentAddressContainer addressContainer">
+                        <span class="currentAddressName addressName"></span>
+                        <span class="currentcityName cityName"></span>
+                        <span class="currentzipCode zipCode"></span>
+                    </section>
+
                 </section>
         
+                <!-- This is the container for the "Delivering Location" subsection, it provides structure for the delivering location dropdown menu and address spans -->
                 <section class="requestingLocation locationSelector">
 
+                    <!-- This is the dropdown menu where you select the delivering location -->
                     <span class="sectionLabel">Where are the items coming from?</span>
                     <select name="currentLocationSelect" id="currentLocationSelect">
                         <option value="branch1">Branch 1</option>
@@ -40,16 +51,26 @@
                         <option value="branch3">Branch 3</option>
                     </select>
 
+                    <!-- This is the section where the delivering address is shown to the user to confirm the selection -->
+                    <section class="deliveringAddressContainer addressContainer">
+                        <span class="deliveringAddressName addressName"></span>
+                        <span class="deliveringCityName cityName"></span>
+                        <span class="deliveringZipCode zipCode"></span>
+                    </section>
+
                 </section>
     
             </section>
 
 <!-- This section of the app is where the client selects which items need to be delivered -->
 
+            <!-- This is the  container for the "Items" section, it provides structure for the items table -->
             <section class="itemsContainer">
     
+                <!-- This is a secondary container for the "Items" section, which allows for fine tuning in CSS -->
                 <section class="itemsToRequest itemsSelector">
 
+                    <!-- This is the items table, it contains all the items that can be requested for delivery, as well as a place to input quantity of items -->
                     <table>
                         <thead>
                             <tr>
@@ -87,51 +108,9 @@
                                                         
                         </tbody>
                     </table>
-
-
-
-                        <!-- <span class="sectionLabel">What does your store need?</span>
-              
-                        <div class="clothing-option">
-                          <input type="checkbox" name="items" value="9900" class="item"/>
-                          <label for="items">Milk</label>
-                        </div>
-              
-                        <div class="item-option">
-                          <input type="checkbox" name="items" value="9900" class="item"/>
-                          <label for="items">Cups</label>
-                        </div>
-              
-                        <div class="item-option">
-                          <input type="checkbox" name="items" value="4900" class="item"/>
-                          <label for="items">Lids</label>
-                        </div>
-              
-                        <div class="item-option">
-                          <input type="checkbox" name="items" value="7900" class="item"/>
-                          <label for="items">Straws</label>
-                        </div>
-              
-                        <div class="item-option">
-                          <input type="checkbox" name="items" value="2900" class="item"/>
-                          <label for="items">Napkins</label>
-                        </div>
-              
-                        <div class="item-option">
-                          <input type="checkbox" name="items" value="1900" class="item"/>
-                          <label for="items">To-Go Bags</label>
-                        </div> -->
                     
                 </section>
-    
-                <!-- <section class="itemsQuantity itemsSelector">
-                    <span class="sectionLabel">How many items in total do you need? (3 gallons of milk, 2 packs of cups, etc.)</span>
 
-                    <form action="">
-                        <input type="number" max="10" placeholder="Max 10">
-                    </form>
-                </section> -->
-    
             </section>
 
 <!-- This section of the app is a button -->

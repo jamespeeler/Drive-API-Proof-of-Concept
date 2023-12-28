@@ -47,7 +47,7 @@ STORE LOCATIONS SECTION
 .storeLocationsContainer {
     height:18vh;
     display: flex;
-    margin-bottom: 0.5%;
+    margin-bottom: 8%;
     border: none;
 }
 
@@ -101,17 +101,6 @@ th {
     text-align: left;
 }
 
-/* td,
-th {
-    width: 30%;
-} */
-
-/* .itemsQuantity {
-    border: 2px solid purple;
-    flex: 1;
-    flex-wrap: wrap;
-} */
-
 .itemsSelector {
     margin: auto;
 }
@@ -141,10 +130,8 @@ button {
     width: 100%;
 }
 
-/* 905px */
-
 /***************************
-MEDIA QUERIES
+MEDIA QUERIES - currently unused
 ***************************/
 
 
