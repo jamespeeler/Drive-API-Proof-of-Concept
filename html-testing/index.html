@@ -24,7 +24,7 @@
                 <section class="currentLocation locationSelector">
 
                     <!-- This is the dropdown menu where you select your current location -->
-                    <span class="sectionLabel">What is your current location?</span>
+                    <span class="sectionLabel">Where are the items going?</span>
                     <select name="currentLocationSelect" id="currentLocationSelect">
                         <option class="branchOption" value="currentBranch1">Branch 1</option>
                         <option class="branchOption" value="currentBranch2">Branch 2</option>
@@ -71,7 +71,7 @@
                 <section class="itemsToRequest itemsSelector">
 
                     <!-- This is the items table, it contains all the items that can be requested for delivery, as well as a place to input quantity of items -->
-                    <table>
+                    <table id="orderItems">
                         <thead>
                             <tr>
                                 <th>Item</th>
@@ -82,28 +82,28 @@
                         <tbody>
                             <tr>
                                 <td>Milk</td>
-                                <td><input type="checkbox" name="item" class="item"></td>
-                                <td><input type="number" placeholder="Leave blank if 0"></td>
+                                <td><input type="checkbox" name="item" class="item milkSelect"></td>
+                                <td><input type="number" name="quantity" class="quantity milkQuantity" placeholder="Leave blank if 0"></td>
                             </tr>
                             <tr>
                                 <td>Cups</td>
-                                <td><input type="checkbox" name="item" class="item"></td>
-                                <td><input type="number" placeholder="Leave blank if 0"></td>
+                                <td><input type="checkbox" name="item" class="item cupsSelect"></td>
+                                <td><input type="number" name="quantity" class="quantity cupsQuantity" placeholder="Leave blank if 0"></td>
                             </tr>
                             <tr>
                                 <td>Lids</td>
-                                <td><input type="checkbox" name="item" class="item"></td>
-                                <td><input type="number" placeholder="Leave blank if 0"></td>
+                                <td><input type="checkbox" name="item" class="item lidsSelect"></td>
+                                <td><input type="number" name="quantity" class="quantity lidsQuantity" placeholder="Leave blank if 0"></td>
                             </tr>
                             <tr>
                                 <td>Straws</td>
-                                <td><input type="checkbox" name="item" class="item"></td>
-                                <td><input type="number" placeholder="Leave blank if 0"></td>
+                                <td><input type="checkbox" name="item" class="item strawsSelect"></td>
+                                <td><input type="number" name="quantity" class="quantity strawsQuantity" placeholder="Leave blank if 0"></td>
                             </tr>
                             <tr>
                                 <td>Napkins</td>
-                                <td><input type="checkbox" name="item" class="item"></td>
-                                <td><input type="number" placeholder="Leave blank if 0"></td>
+                                <td><input type="checkbox" name="item" class="item napkinsSelect"></td>
+                                <td><input type="number" name="quantity" class="quantity napkinsQuantity" placeholder="Leave blank if 0"></td>
                             </tr>
                                                         
                         </tbody>
@@ -117,7 +117,7 @@
 
             <section class="orderButtonContainer">
                 <section class="placeOrder">
-                    <button>Place order</button>
+                    <button id="orderBtn">Place order</button>
                 </section>
             </section>
 
@@ -125,5 +125,6 @@
     </section>
 
     <script src="main.js"></script>
+    <script src="delivery.js"></script>
 </body>
 </html>

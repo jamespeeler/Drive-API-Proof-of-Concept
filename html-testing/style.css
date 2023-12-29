@@ -100,6 +100,7 @@ SELECT ITEMS SECTION
 
 table {
     margin: auto;
+    border-spacing: 1.8em 0;
 }
 
 th {
@@ -127,12 +128,16 @@ ORDER BUTTON SECTION
 
 .placeOrder {
     height: 100%;
+    display: flex;
+    justify-content: center;
     /* border: 2px solid yellow; */
 }
 
 button {
     height: 100%;
-    width: 100%;
+    width: 80%;
+    font-weight: bold;
+    font-size: 2em;
 }
 
 /***************************
