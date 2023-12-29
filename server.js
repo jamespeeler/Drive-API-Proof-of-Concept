@@ -6,6 +6,33 @@ const url = require('url') //need url access
 require('dotenv').config() //use dotenv for SECRETS
 const DoorDashClient = require('@doordash/sdk') //use the DoorDash Drive API
 const { log } = require('console') //Drive API needs console access
+const jwt = require('jsonwebtoken') //use jwt for API auth
+
+//this contains the key details to make API calls to DoorDash
+const accessKey = {
+    "developer_id": process.env.DEVELOPER_ID,
+    "key_id": process.env.KEY_ID,
+    "signing_secret": process.env.SIGNING_SECRET
+}
+
+//make a data object for getting a JWT
+const data = { 
+    aud: 'doordash',
+    iss: accessKey.developer_id,
+    kid: accessKey.key_id,
+    exp: Math.floor(Date.now() / 1000 + 300),
+    iat: Math.floor(Date.now() / 1000)
+}
+
+const headers = {algorithm: 'HS256', header: {'dd-ver': 'DD-JWT-V1'}}
+
+const token = jwt.sign(
+    data,
+    Buffer.from(accessKey.signing_secret, 'base64'),
+    headers,
+)
+
+console.log(token)
 
 
 //make an externalDeliveryID variable because i was getting tired of manually changing it every time i needed to test something
@@ -43,11 +70,7 @@ app.get('/', (req,res) => {
 app.post('/create-delivery-quote', async (req,res) => {
 
     //set the Drive API client IDs and secrets
-    const client = new DoorDashClient.DoorDashClient({
-        "developer_id": process.env.DEVELOPER_ID,
-        "key_id": process.env.KEY_ID,
-        "signing_secret": process.env.SIGNING_SECRET
-    })
+    const client = new DoorDashClient.DoorDashClient(accessKey)
 
     //send formatted addresses and phone numbers to Drive API to receive a quote
     const response = await client.deliveryQuote({
@@ -72,11 +95,7 @@ app.post('/create-delivery-quote', async (req,res) => {
 app.post('/accept-quote', async (req, res) => {
 
     //set the Drive API client IDs and secrets
-    const client = new DoorDashClient.DoorDashClient({
-        "developer_id": process.env.DEVELOPER_ID,
-        "key_id": process.env.KEY_ID,
-        "signing_secret": process.env.SIGNING_SECRET
-    })
+    const client = new DoorDashClient.DoorDashClient(accessKey)
 
     // send delivery-id to Drive API to accept the quote
     const response = await client.deliveryQuoteAccept(
@@ -96,11 +115,7 @@ app.post('/accept-quote', async (req, res) => {
 app.post('/create-delivery', async (req, res) => {
 
     //set the Drive API client IDs and secrets
-    const client = new DoorDashClient.DoorDashClient({
-        "developer_id": process.env.DEVELOPER_ID,
-        "key_id": process.env.KEY_ID,
-        "signing_secret": process.env.SIGNING_SECRET        
-    })
+    const client = new DoorDashClient.DoorDashClient(accessKey)
 
     //send a createDelivery object to DoorDash to create a delivery
     const response = client.createDelivery({
@@ -125,11 +140,7 @@ app.post('/create-delivery', async (req, res) => {
 app.get('/get-delivery-status', async (req, res) => {
 
     //set the Drive API client IDs and secrets
-    const client = new DoorDashClient.DoorDashClient({
-        "developer_id": process.env.DEVELOPER_ID,
-        "key_id": process.env.KEY_ID,
-        "signing_secret": process.env.SIGNING_SECRET        
-    })
+    const client = new DoorDashClient.DoorDashClient(accessKey)
 
     //send the delivery  ID of the desired order to Drive API to receieve order updates
     const response = await client.getDelivery(externalDeliveryID)
@@ -148,11 +159,7 @@ app.get('/get-delivery-status', async (req, res) => {
 app.put('/cancel-delivery', async (req, res) => {
 
     //set the Drive API client IDs and secrets
-    const client = new DoorDashClient.DoorDashClient({
-        "developer_id": process.env.DEVELOPER_ID,
-        "key_id": process.env.KEY_ID,
-        "signing_secret": process.env.SIGNING_SECRET        
-    })
+    const client = new DoorDashClient.DoorDashClient(accessKey)
 
     //send a cancel-delivery request to Drive API to request cancellation
     const response = await client.cancelDelivery({

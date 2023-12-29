@@ -15,7 +15,9 @@ function getFormValues(){
     quantityArray.forEach((e) => {//loop through the 'quantityArray' array
         if (e.value != ""){//if the user has entered a number into the field
             quantityValues.push(e.valueAsNumber) //then push that number into the 'quantityValues' array
-        } else { //otherwise, just push a 0 into it
+        } else if (e.value === '0') { //otherwise, if a user inputted a 0
+            quantityValues.push(0) //then push the 0
+        } else { //if the field is empty, just push a 0
             quantityValues.push(0)
         }
     })
