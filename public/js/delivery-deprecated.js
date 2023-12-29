@@ -1,38 +1,35 @@
-let orderButton = document.getElementById('orderBtn') //make an 'orderButton' variable which grabs the "order button" from EJS/HTML and add a click event listener
-orderButton.addEventListener('click', testGetFormValues)// orderButton.addEventListener('click', createDelivery)
+//may need to initialize 'menuItems' i.e. 'let menuItems'
+
+//make an 'orderButton' variable which grabs the "order button" from EJS/HTML and add a click event listener
+let orderButton = document.getElementById('orderBtn')
+orderButton.addEventListener('click', createDelivery)
 
 //create a 'getFormValues' function that will grab all of the form values and combine them into an object
 function getFormValues(){
 
-    const inputContainer = document.getElementById('orderItems') //set 'inputContainer' to the WHOLE table
-    const checkboxList = inputContainer.querySelectorAll('.item') //set 'checkboxList' to be ALL of the checkbox elements
-    const checkboxArray = Array.from(checkboxList) //set 'fieldArray' to be an array from 'fieldList'
+    //set 'inputContainer' to the WHOLE form container
+    const inputContainer = document.getElementById('order-details')
+    //set 'fieldList' to be ALL of the input elements
+    const fieldList = inputContainer.querySelectorAll('input')
+    //set 'fieldArray' to be an array from 'fieldList'
+    const fieldArray = Array.from(fieldList)
 
-    const quantityList = inputContainer.querySelectorAll('.quantity') //set 'quantityList' to ALL of the '.quantity' elements
-    const quantityArray = Array.from(quantityList) //make an array from 'quantityList'
-    let quantityValues = [] // make an empty array to store the user-inputted values
-
-    quantityArray.forEach((e) => {//loop through the 'quantityArray' array
-        if (e.value != ""){//if the user has entered a number into the field
-            quantityValues.push(e.valueAsNumber) //then push that number into the 'quantityValues' array
-        } else if (e.value === '0') { //otherwise, if a user inputted a 0
-            quantityValues.push(0) //then push the 0
-        } else { //if the field is empty, just push a 0
-            quantityValues.push(0)
+    //make a payload from the 'fieldArray' array. 
+    const payload = fieldArray.reduce((obj, field) => {
+        if (field.name === 'items') {//if the field has a name of 'items'
+            if (field.checked){//and if 'field' is checked
+                obj['order_value'] == parseInt(field.value) //set an [order_value] property to the 'field' value
+            }
+        } else { //otherwise set a [field.name] value to 'field.value'
+            obj[field.name] = field.value
         }
-    })
 
-    let payload = {} //create an empty payload object to combine the data into
-
-    for (let i = 0; i < checkboxArray.length; i++){ //loop checkboxArray.length number of times
-        payload[checkboxArray[i].dataset.item] = [quantityValues[i]] //iteratively create a payload object from the two arrays
-    }
-
+        return obj
+    }, {order_value: 0}
+    )
+    console.log(payload);
     return payload
-}
 
-function testGetFormValues(){
-    console.log(getFormValues());
 }
 
 

@@ -32,11 +32,13 @@ const token = jwt.sign(
     headers,
 )
 
-console.log(token)
+if (token) {
+    console.log('JWT Generated');
+}
 
 
 //make an externalDeliveryID variable because i was getting tired of manually changing it every time i needed to test something
-let externalDeliveryID = 'D-24345'
+let externalDeliveryID = 'D-22365'
 
 
 //Set up MongoDB variables
@@ -61,8 +63,7 @@ app.use(express.json()) //render some stuff as json
 
 // listen for root GET requests and send HTML when requested 
 app.get('/', (req,res) => {
-    // res.sendFile(__dirname + '/index.html')
-    res.render('index.ejs')
+    res.sendFile(__dirname + '/views/index.html')
 })
 
 
@@ -114,11 +115,17 @@ app.post('/accept-quote', async (req, res) => {
 //listen for POST requests on the /create-delivery endpoint
 app.post('/create-delivery', async (req, res) => {
 
+    console.log(req.body.finalPayload)
+
+    let itemsObj = req.body.finalPayload
+    console.log(itemsObj)
+
     //set the Drive API client IDs and secrets
     const client = new DoorDashClient.DoorDashClient(accessKey)
 
     //send a createDelivery object to DoorDash to create a delivery
     const response = client.createDelivery({
+        "items": itemsObj,
         external_delivery_id: externalDeliveryID,
         pickup_address: '1000 4th Ave, Seattle, WA, 98104',
         pickup_phone_number: '+16505555555',
