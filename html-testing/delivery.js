@@ -8,37 +8,25 @@ function getFormValues(){
     const checkboxList = inputContainer.querySelectorAll('.item') //set 'checkboxList' to be ALL of the checkbox elements
     const checkboxArray = Array.from(checkboxList) //set 'fieldArray' to be an array from 'fieldList'
 
-    const quantityList = inputContainer.querySelectorAll('.quantity')
-    const quantityArray = Array.from(quantityList)
-    let quantityValues = []
-    quantityArray.forEach((e) => {
-        if (e.value != ""){
-            quantityValues.push(e.valueAsNumber)
-        } else {
+    const quantityList = inputContainer.querySelectorAll('.quantity') //set 'quantityList' to ALL of the '.quantity' elements
+    const quantityArray = Array.from(quantityList) //make an array from 'quantityList'
+    let quantityValues = [] // make an empty array to store the user-inputted values
+
+    quantityArray.forEach((e) => {//loop through the 'quantityArray' array
+        if (e.value != ""){//if the user has entered a number into the field
+            quantityValues.push(e.valueAsNumber) //then push that number into the 'quantityValues' array
+        } else { //otherwise, just push a 0 into it
             quantityValues.push(0)
         }
     })
 
-    console.log(checkboxArray, quantityArray, quantityValues)
+    let payload = {} //create an empty payload object to combine the data into
 
-    const payload = ":D"
+    for (let i = 0; i < checkboxArray.length; i++){ //loop checkboxArray.length number of times
+        payload[checkboxArray[i].dataset.item] = [quantityValues[i]] //iteratively create a payload object from the two arrays
+    }
 
-    //make a payload from the 'fieldArray' array. 
-    // const payload = fieldArray.reduce((obj, field) => {
-    //     if (field.name === 'items') {//if the field has a name of 'items'
-    //         if (field.checked){//and if 'field' is checked
-    //             obj['order_value'] == parseInt(field.value) //set an [order_value] property to the 'field' value
-    //         }
-    //     } else { //otherwise set a [field.name] value to 'field.value'
-    //         obj[field.name] = field.value
-    //     }
-
-    //     return obj
-    // }, {order_value: 0}
-    // )
-    console.log(payload);
     return payload
-
 }
 
 function testGetFormValues(){
