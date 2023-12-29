@@ -24,18 +24,18 @@
                 <section class="currentLocation locationSelector">
 
                     <!-- This is the dropdown menu where you select your current location -->
-                    <span class="sectionLabel">Where do you need the delivery?</span>
+                    <span class="sectionLabel">What is your current location?</span>
                     <select name="currentLocationSelect" id="currentLocationSelect">
-                        <option value="branch1">Branch 1</option>
-                        <option value="branch2">Branch 2</option>
-                        <option value="branch3">Branch 3</option>
+                        <option class="branchOption" value="currentBranch1">Branch 1</option>
+                        <option class="branchOption" value="currentBranch2">Branch 2</option>
+                        <option class="branchOption" value="currentBranch3">Branch 3</option>
                     </select>
 
                     <!-- This is the section where the current address is shown to the user to confirm the selection -->
                     <section class="currentAddressContainer addressContainer">
-                        <span class="currentAddressName addressName"></span>
-                        <span class="currentcityName cityName"></span>
-                        <span class="currentzipCode zipCode"></span>
+                        <span class="currentStreet street"></span>
+                        <span class="currentCityName cityName"></span>
+                        <span class="currentZipCode zipCode"></span>
                     </section>
 
                 </section>
@@ -45,15 +45,15 @@
 
                     <!-- This is the dropdown menu where you select the delivering location -->
                     <span class="sectionLabel">Where are the items coming from?</span>
-                    <select name="currentLocationSelect" id="currentLocationSelect">
-                        <option value="branch1">Branch 1</option>
-                        <option value="branch2">Branch 2</option>
-                        <option value="branch3">Branch 3</option>
+                    <select name="deliveringLocationSelect" id="deliveringLocationSelect">
+                        <option class="branchOption" value="deliveringBranch1">Branch 1</option>
+                        <option class="branchOption" value="deliveringBranch2">Branch 2</option>
+                        <option class="branchOption" value="deliveringBranch3">Branch 3</option>
                     </select>
 
                     <!-- This is the section where the delivering address is shown to the user to confirm the selection -->
                     <section class="deliveringAddressContainer addressContainer">
-                        <span class="deliveringAddressName addressName"></span>
+                        <span class="deliveringStreet street"></span>
                         <span class="deliveringCityName cityName"></span>
                         <span class="deliveringZipCode zipCode"></span>
                     </section>
@@ -123,5 +123,7 @@
 
         </section>
     </section>
+
+    <script src="main.js"></script>
 </body>
 </html>

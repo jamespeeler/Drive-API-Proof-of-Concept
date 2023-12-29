@@ -76,6 +76,11 @@ select {
     display: block;
 }
 
+.addressContainer {
+    margin-top: 2.5%;
+    font-weight: bold;
+}
+
 
 /***************************
 SELECT ITEMS SECTION
