@@ -115,10 +115,8 @@ app.post('/accept-quote', async (req, res) => {
 //listen for POST requests on the /create-delivery endpoint
 app.post('/create-delivery', async (req, res) => {
 
-    console.log(req.body.finalPayload)
-
+    //make an 'itemsObj' variable which pulls item data from the request body
     let itemsObj = req.body.finalPayload
-    console.log(itemsObj)
 
     //set the Drive API client IDs and secrets
     const client = new DoorDashClient.DoorDashClient(accessKey)
