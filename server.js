@@ -17,34 +17,10 @@ const client = new MongoClient(uri)
 
 async function run() {
     try {
-        const database = client.db('branch-connector-database');
-        const addresses = database.collection('adresses');
-        const storeAddress = await addresses.find()
-        console.log(storeAddress);
-
-        // database.collection('addresses').insertOne({
-        //     addresses: {
-        //         branch1: {
-        //             street: "123 Example Street",
-        //             cityName: "Kissimmee, FL",
-        //             zipCode: "34746"
-        //         },
-        //         branch2: {
-        //             street: "345 Sample Road",
-        //             cityName: "Poinciana, FL",
-        //             zipCode: "33837"
-        //         },
-        //         branch3: {
-        //             street: "678 Model Blvd",
-        //             cityName: "Orlando, FL",
-        //             zipCode: "32789"
-        //         }
-        //     }
-        // }).then(result => {
-        //     console.log('Todo Added')
-        //     response.redirect('/')
-        // })
-        // .catch(error => console.error(error))
+        let database = client.db('branch-connector-database');
+        let menuItems = database.collection('menu-items');
+        
+        console.log(menuItems.find())
 
     } finally {
       // Ensures that the client will close when you finish/error
