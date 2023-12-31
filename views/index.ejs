@@ -1,143 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Top Clothing</title>
-    <link rel="stylesheet" href="css/style.css">
-  </head>
-  <body>
-    <div id="order-details">
-      <div class="container">
-        <div class="input-forms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Branch Inventory Delivery Service</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <section class="container">
+        <section class="menuContainer">
 
-          <div class="address-details">
-            <h1>Top Clothing</h1>
-            <p>11 Madison Ave, New York, NY 10010</p>
-            <p>+1 (650) 5555555</p>
-            <p id="address-label">Enter your address below</p>
-          </div>
+<!-- This section of the app is for selecting which store is requesting delivery 
+     & which store will be supplying the delivery   
+-->
+            <!-- This is the container for the Store Locations section, it provides structure for both the "store location" dropdown menus and the address spans -->
+            <section class="storeLocationsContainer"> 
 
-          <form onsubmit="return false">
+                <!-- This is the container for the "Current Location" subsection, it provides structure for the "current location" dropdown menu and the address spans -->
+                <section class="currentLocation locationSelector">
 
-          <div class="address-wrap"> 
-            <input type="text" placeholder="Street" id="street" name="street" required/>
-            <input type="text" placeholder="City" id="city" name="city" required/>
-            <input
-              type="text"
-              placeholder="Zipcode"
-              id="zipcode"
-              name="zipcode"
-              required
-            />
-          </div>
+                    <!-- This is the dropdown menu where you select your current location -->
+                    <span class="sectionLabel">Where are the items going?</span>
+                    <select name="currentLocationSelect" id="currentLocationSelect">
+                        <option class="branchOption" value="currentBranch1">Branch 1</option>
+                        <option class="branchOption" value="currentBranch2">Branch 2</option>
+                        <option class="branchOption" value="currentBranch3">Branch 3</option>
+                    </select>
 
-          <div class="customer-info">
-            <p>Contact Details</p>
+                    <!-- This is the section where the current address is shown to the user to confirm the selection -->
+                    <section class="currentAddressContainer addressContainer">
+                        <span class="currentStreet street"></span>
+                        <span class="currentCityName cityName"></span>
+                        <span class="currentZipCode zipCode"></span>
+                    </section>
 
-            <input
-              type="text"
-              placeholder="First Name"
-              id="name"
-              name="dropoff_contact_given_name"
-              required
-            />
+                </section>
+        
+                <!-- This is the container for the "Delivering Location" subsection, it provides structure for the delivering location dropdown menu and address spans -->
+                <section class="requestingLocation locationSelector">
 
-            <input
-              type="text"
-              placeholder="Last Name"
-              id="lastname"
-              name="dropoff_contact_family_name"
-              required
-            />
+                    <!-- This is the dropdown menu where you select the delivering location -->
+                    <span class="sectionLabel">Where are the items coming from?</span>
+                    <select name="deliveringLocationSelect" id="deliveringLocationSelect">
+                        <option class="branchOption" value="deliveringBranch1">Branch 1</option>
+                        <option class="branchOption" value="deliveringBranch2">Branch 2</option>
+                        <option class="branchOption" value="deliveringBranch3">Branch 3</option>
+                    </select>
 
-            <input
-              type="text"
-              placeholder="Phone Number"
-              id="phonenumber"
-              name="dropoff_phone_number"
-              type="number"
-              required
-            />
+                    <!-- This is the section where the delivering address is shown to the user to confirm the selection -->
+                    <section class="deliveringAddressContainer addressContainer">
+                        <span class="deliveringStreet street"></span>
+                        <span class="deliveringCityName cityName"></span>
+                        <span class="deliveringZipCode zipCode"></span>
+                    </section>
 
-          </div>
+                </section>
+    
+            </section>
 
-        </div>
+<!-- This section of the app is where the client selects which items need to be delivered -->
 
-        <div class="menu-items">
+            <!-- This is the  container for the "Items" section, it provides structure for the items table -->
+            <section class="itemsContainer">
+    
+                <!-- This is a secondary container for the "Items" section, which allows for fine tuning in CSS -->
+                <section class="itemsToRequest itemsSelector">
 
-          <h2>Menu Items</h2>
+                    <!-- This is the items table, it contains all the items that can be requested for delivery, as well as a place to input quantity of items -->
+                    <table id="orderItems">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Select</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Milk</td>
+                                <td><input type="checkbox" name="item" data-item="milk" class="item milkSelect"></td>
+                                <td><input type="number" name="quantity" class="quantity milkQuantity" placeholder="Leave blank if 0"></td>
+                            </tr>
+                            <tr>
+                                <td>Cups</td>
+                                <td><input type="checkbox" name="item" data-item="cups" class="item cupsSelect"></td>
+                                <td><input type="number" name="quantity" class="quantity cupsQuantity" placeholder="Leave blank if 0"></td>
+                            </tr>
+                            <tr>
+                                <td>Lids</td>
+                                <td><input type="checkbox" name="item" data-item="lids" class="item lidsSelect"></td>
+                                <td><input type="number" name="quantity" class="quantity lidsQuantity" placeholder="Leave blank if 0"></td>
+                            </tr>
+                            <tr>
+                                <td>Straws</td>
+                                <td><input type="checkbox" name="item" data-item="straws" class="item strawsSelect"></td>
+                                <td><input type="number" name="quantity" class="quantity strawsQuantity" placeholder="Leave blank if 0"></td>
+                            </tr>
+                            <tr>
+                                <td>Napkins</td>
+                                <td><input type="checkbox" name="item" data-item="napkins" class="item napkinsSelect"></td>
+                                <td><input type="number" name="quantity" class="quantity napkinsQuantity" placeholder="Leave blank if 0"></td>
+                            </tr>
+                                                        
+                        </tbody>
+                    </table>
+                    
+                </section>
 
-          <div class="clothing-option">
-            <input type="checkbox" name="items" value="9900" class="clothing"/>
-            <label for="items">Brown Leather Jacket $99</label>
-          </div>
+            </section>
 
-          <div class="clothing-option">
-            <input type="checkbox" name="items" value="9900" class="clothing"/>
-            <label for="items">Black Leather Jacket $99</label>
-          </div>
+<!-- This section of the app is a button -->
 
-          <div class="clothing-option">
-            <input type="checkbox" name="items" value="4900" class="clothing"/>
-            <label for="items">Gray Hooded Jacket $49</label>
-          </div>
+            <section class="orderButtonContainer">
+                <section class="placeOrder">
+                    <button id="orderBtn">Next Step</button>
+                </section>
+            </section>
 
-          <div class="clothing-option">
-            <input type="checkbox" name="items" value="7900" class="clothing"/>
-            <label for="items">Fitted Denim Jeans $79</label>
-          </div>
+        </section>
+    </section>
 
-          <div class="clothing-option">
-            <input type="checkbox" name="items" value="2900" class="clothing"/>
-            <label for="items">Slim Fit T-Shirt $29</label>
-          </div>
-
-          <div class="clothing-option">
-            <input type="checkbox" name="items" value="1900" class="clothing"/>
-            <label for="items">Premium Dress Socks $19</label>
-          </div>
-        </div>
-
-        <div class="payment">
-          <div>
-
-            <h2>Payment Summary</h2>
-
-            <table>
-              <tbody>
-                <tr>
-                  <th>Subtotal:</th>
-                  <td id="price">$0.00</td>
-                </tr>
-                <tr>
-                  <th>Delivery Fee:</th>
-                  <td id="fee">$0.00</td>
-                </tr>
-                <tr>
-                  <th>Order Total:</th>
-                  <td id="total">$0.00</td>
-                </tr>
-              </tbody>
-            </table>
-
-          </div>
-
-          <div class="btns">
-             <!-- <button id="feeBtn" onclick="getFee()">
-              Get Fee
-            </button> -->
-            <button id="orderBtn">
-              Place Order
-            </button>
-          </div>
-
-          <!-- </form> -->
-        </div>
-      </div>
-    </div>
-    <script src="js/order.js"></script>
-    <script src="js/delivery.js"></script>
-  </body>
+    <script src="/js/main.js"></script>
+    <script src="/js/delivery.js"></script>
+</body>
 </html>

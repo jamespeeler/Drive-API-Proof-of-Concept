@@ -1,12 +1,60 @@
+require('dotenv').config() //use dotenv for SECRETS
 const express = require('express') //use express
 const app = express() //set express const
-const MongoClient = require('mongodb').MongoClient //use MongoDB
+// const MongoClient = require('mongodb').MongoClient
+const { MongoClient } = require('mongodb')
+const uri = process.env.DB_STRING
 const PORT = 2121 //set port, will likely change this later
 const url = require('url') //need url access
-require('dotenv').config() //use dotenv for SECRETS
 const DoorDashClient = require('@doordash/sdk') //use the DoorDash Drive API
 const { log } = require('console') //Drive API needs console access
 const jwt = require('jsonwebtoken') //use jwt for API auth
+
+//make an externalDeliveryID variable because i was getting tired of manually changing it every time i needed to test something
+let externalDeliveryID = 'D-22365'
+
+const client = new MongoClient(uri)
+
+async function run() {
+    try {
+        const database = client.db('branch-connector-database');
+        const addresses = database.collection('adresses');
+        const storeAddress = await addresses.find()
+        console.log(storeAddress);
+
+        // database.collection('addresses').insertOne({
+        //     addresses: {
+        //         branch1: {
+        //             street: "123 Example Street",
+        //             cityName: "Kissimmee, FL",
+        //             zipCode: "34746"
+        //         },
+        //         branch2: {
+        //             street: "345 Sample Road",
+        //             cityName: "Poinciana, FL",
+        //             zipCode: "33837"
+        //         },
+        //         branch3: {
+        //             street: "678 Model Blvd",
+        //             cityName: "Orlando, FL",
+        //             zipCode: "32789"
+        //         }
+        //     }
+        // }).then(result => {
+        //     console.log('Todo Added')
+        //     response.redirect('/')
+        // })
+        // .catch(error => console.error(error))
+
+    } finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+    }
+  }
+
+run().catch(console.dir)
+
+
 
 //this contains the key details to make API calls to DoorDash
 const accessKey = {
@@ -24,42 +72,38 @@ const data = {
     iat: Math.floor(Date.now() / 1000)
 }
 
+//headers for DoorDash JWT
 const headers = {algorithm: 'HS256', header: {'dd-ver': 'DD-JWT-V1'}}
 
+//JWT token creation
 const token = jwt.sign(
     data,
     Buffer.from(accessKey.signing_secret, 'base64'),
     headers,
 )
 
+//confirm token was created
 if (token) {
     console.log('JWT Generated');
 }
 
-
-//make an externalDeliveryID variable because i was getting tired of manually changing it every time i needed to test something
-let externalDeliveryID = 'D-22365'
-
-
-//Set up MongoDB variables
-// let db,
-//     dbConnectionStr = process.env.DB_STRING,
-//     dbName = 'doordash-drive-tests'
+// //Set up MongoDB variables
+// let dbConnectionStr = process.env.DB_STRING,
+//     dbName = 'branch-connector-database',
+//     db
 
 
-//Connect to Database
-//MongoClient.connect(dbConnectionStr)
+// //Connect to Database
+// MongoClient.connect(dbConnectionStr)
 //     .then(client => {
 //         console.log(`Connected to ${dbName} Database`)
 //         db = client.db(dbName)
 //     })
 
-    
 app.set('view engine', 'ejs') //use ejs for HTML templates
 app.use(express.static('public')) //use a public folder to send static files
 app.use(express.urlencoded({ extended: true })) //middleware to do something?
 app.use(express.json()) //render some stuff as json
-
 
 // listen for root GET requests and send HTML when requested 
 app.get('/', (req,res) => {
@@ -186,6 +230,8 @@ app.listen(process.env.PORT || PORT, (err)=>{
     }
     console.log(`Server running on port ${PORT}`)
 })
+
+
 
 
 
