@@ -1,10 +1,19 @@
+//------------------------------------------------------------------
+//Getting consts and requires etc. set up
+//------------------------------------------------------------------
+
 require('dotenv').config() //use dotenv for SECRETS
 const express = require('express') //use express
 const app = express() //set express const
-// const MongoClient = require('mongodb').MongoClient
-const { MongoClient } = require('mongodb')
-const uri = process.env.DB_STRING
-const PORT = 2121 //set port, will likely change this later
+
+// const MongoClient = require('mongodb').MongoClient //old code, keeping it around Just In Case™
+const { MongoClient } = require('mongodb') //set up to use mongodb
+const uri = process.env.DB_STRING //grab uri from .env
+let dbName = 'branch-connector-database' //set database name
+let db //initialize 'db' variable
+
+const PORT = 2121 //set port, will need to change this later
+
 const url = require('url') //need url access
 const DoorDashClient = require('@doordash/sdk') //use the DoorDash Drive API
 const { log } = require('console') //Drive API needs console access
@@ -13,24 +22,45 @@ const jwt = require('jsonwebtoken') //use jwt for API auth
 //make an externalDeliveryID variable because i was getting tired of manually changing it every time i needed to test something
 let externalDeliveryID = 'D-22365'
 
+//------------------------------------------------------------------
+//MongoDB connection
+//------------------------------------------------------------------
+
 const client = new MongoClient(uri)
 
-async function run() {
-    try {
-        let database = client.db('branch-connector-database');
-        let menuItems = database.collection('menu-items');
+//Connect to Database
+MongoClient.connect(uri)
+    .then(client => {
+        console.log(`Connected to ${dbName} Database`)
+        db = client.db(dbName)
+    })
+
+// async function run() {
+//     try {
+//         let database = client.db('branch-connector-database');
+//         let menuItems = database.collection('menu-items');
         
-        console.log(menuItems.find())
+//         console.log(menuItems.find())
 
-    } finally {
-      // Ensures that the client will close when you finish/error
-      await client.close();
-    }
-  }
+//     } finally {
+//       // Ensures that the client will close when you finish/error
+//       await client.close();
+//     }
+//   }
 
-run().catch(console.dir)
+// run().catch(console.dir)
+
+// //Set up MongoDB variables
+// let dbConnectionStr = process.env.DB_STRING,
+//     dbName = 'branch-connector-database',
+//     db
 
 
+
+
+//------------------------------------------------------------------
+//DoorDash Drive API setup
+//------------------------------------------------------------------
 
 //this contains the key details to make API calls to DoorDash
 const accessKey = {
@@ -63,29 +93,27 @@ if (token) {
     console.log('JWT Generated');
 }
 
-// //Set up MongoDB variables
-// let dbConnectionStr = process.env.DB_STRING,
-//     dbName = 'branch-connector-database',
-//     db
-
-
-// //Connect to Database
-// MongoClient.connect(dbConnectionStr)
-//     .then(client => {
-//         console.log(`Connected to ${dbName} Database`)
-//         db = client.db(dbName)
-//     })
+//------------------------------------------------------------------
+//Set up for the server API
+//------------------------------------------------------------------
 
 app.set('view engine', 'ejs') //use ejs for HTML templates
 app.use(express.static('public')) //use a public folder to send static files
 app.use(express.urlencoded({ extended: true })) //middleware to do something?
 app.use(express.json()) //render some stuff as json
 
+//------------------------------------------------------------------
+//Listen for request calls
+//------------------------------------------------------------------
+
 // listen for root GET requests and send HTML when requested 
 app.get('/', (req,res) => {
     res.sendFile(__dirname + '/views/index.html')
 })
 
+app.get('/', async(req, res) => {
+    
+})
 
 //listen for POST requests from the /create-delivery-quote endpoint
 app.post('/create-delivery-quote', async (req,res) => {
@@ -199,7 +227,10 @@ app.put('/cancel-delivery', async (req, res) => {
 
 })
 
-//start the server
+//------------------------------------------------------------------
+//Start the server
+//------------------------------------------------------------------
+
 app.listen(process.env.PORT || PORT, (err)=>{
     if (err) {
         console.log(err);
@@ -207,12 +238,9 @@ app.listen(process.env.PORT || PORT, (err)=>{
     console.log(`Server running on port ${PORT}`)
 })
 
-
-
-
-
-
-
+//------------------------------------------------------------------
+//Unused code that might become useful in future versions of the app
+//------------------------------------------------------------------
 
 //listen for PATCH requests on the /update-delivery endpoint - not currently running
 // app.patch('/update-delivery', async (req, res) => {
