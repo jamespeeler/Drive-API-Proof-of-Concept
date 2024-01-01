@@ -6,13 +6,20 @@ require('dotenv').config() //use dotenv for SECRETS
 const express = require('express') //use express
 const app = express() //set express const
 
+//-----
+
 // const MongoClient = require('mongodb').MongoClient //old code, keeping it around Just In Case™
 const { MongoClient } = require('mongodb') //set up to use mongodb
 const uri = process.env.DB_STRING //grab uri from .env
 let dbName = 'branch-connector-database' //set database name
 let db //initialize 'db' variable
+const mongoDBClient = new MongoClient(uri) //mongoClient variable
+
+//-----
 
 const PORT = 2121 //set port, will need to change this later
+
+//-----
 
 const url = require('url') //need url access
 const DoorDashClient = require('@doordash/sdk') //use the DoorDash Drive API
@@ -26,14 +33,14 @@ let externalDeliveryID = 'D-22365'
 //MongoDB connection
 //------------------------------------------------------------------
 
-const client = new MongoClient(uri)
-
 //Connect to Database
-MongoClient.connect(uri)
-    .then(client => {
-        console.log(`Connected to ${dbName} Database`)
-        db = client.db(dbName)
-    })
+// MongoClient.connect(uri)
+//     .then(client => {
+//         console.log(`Connected to ${dbName} Database`)
+//         db = client.db(dbName)
+//     })
+
+//-----
 
 // async function run() {
 //     try {
@@ -48,26 +55,29 @@ MongoClient.connect(uri)
 //     }
 //   }
 
+//-----
+
 // run().catch(console.dir)
+
+//-----
 
 // //Set up MongoDB variables
 // let dbConnectionStr = process.env.DB_STRING,
 //     dbName = 'branch-connector-database',
 //     db
 
-
-
-
 //------------------------------------------------------------------
 //DoorDash Drive API setup
 //------------------------------------------------------------------
 
-//this contains the key details to make API calls to DoorDash
+//this contains the access key details to make API calls to DoorDash
 const accessKey = {
     "developer_id": process.env.DEVELOPER_ID,
     "key_id": process.env.KEY_ID,
     "signing_secret": process.env.SIGNING_SECRET
 }
+
+//-----
 
 //make a data object for getting a JWT
 const data = { 
@@ -78,8 +88,12 @@ const data = {
     iat: Math.floor(Date.now() / 1000)
 }
 
+//-----
+
 //headers for DoorDash JWT
 const headers = {algorithm: 'HS256', header: {'dd-ver': 'DD-JWT-V1'}}
+
+//-----
 
 //JWT token creation
 const token = jwt.sign(
@@ -88,13 +102,15 @@ const token = jwt.sign(
     headers,
 )
 
+//-----
+
 //confirm token was created
 if (token) {
     console.log('JWT Generated');
 }
 
 //------------------------------------------------------------------
-//Set up for the server API
+//Setting up for the server API
 //------------------------------------------------------------------
 
 app.set('view engine', 'ejs') //use ejs for HTML templates
@@ -111,83 +127,46 @@ app.get('/', (req,res) => {
     res.sendFile(__dirname + '/views/index.html')
 })
 
-app.get('/', async(req, res) => {
-    
-})
-
-//listen for POST requests from the /create-delivery-quote endpoint
-app.post('/create-delivery-quote', async (req,res) => {
-
-    //set the Drive API client IDs and secrets
-    const client = new DoorDashClient.DoorDashClient(accessKey)
-
-    //send formatted addresses and phone numbers to Drive API to receive a quote
-    const response = await client.deliveryQuote({
-        external_delivery_id: externalDeliveryID,
-        pickup_address: '1000 4th Ave, Seattle, WA, 98104',
-        pickup_phone_number: '+16505555555',
-        pickup_business_name: 'example store',
-        dropoff_address: '1201 3rd Ave, Seattle, WA, 98101',
-        dropoff_phone_number: '+16505554555'
-    })
-    .then(response => { //log the data + respond
-        console.log(response.data)
-        res.send(response)
-    })
-    .catch(err => { //catch errors
-        console.log(err)
-    })
-
-})
-
-//listen for POST requests on the /accept-quote endpoint
-app.post('/accept-quote', async (req, res) => {
-
-    //set the Drive API client IDs and secrets
-    const client = new DoorDashClient.DoorDashClient(accessKey)
-
-    // send delivery-id to Drive API to accept the quote
-    const response = await client.deliveryQuoteAccept(
-        externalDeliveryID
-    )
-    .then(response => { // log the data + respond
-        console.log(response.data)
-        res.send(response)
-    })
-    .catch(err => { //catch errors
-        console.log(err)
-    })
-
-})
+//-----
 
 //listen for POST requests on the /create-delivery endpoint
 app.post('/create-delivery', async (req, res) => {
 
     //make an 'itemsObj' variable which pulls item data from the request body
-    let itemsObj = req.body.finalPayload
+    let dataObj = {
+        items: req.body[0],
+        addresses: req.body[1]
+    }
 
-    //set the Drive API client IDs and secrets
-    const client = new DoorDashClient.DoorDashClient(accessKey)
+    let items = dataObj.items
+    let pickupAddress = dataObj.addresses[1].deliveringLocation
+    let dropoffAddress = dataObj.addresses[0].currentLocation
 
-    //send a createDelivery object to DoorDash to create a delivery
-    const response = client.createDelivery({
-        "items": itemsObj,
-        external_delivery_id: externalDeliveryID,
-        pickup_address: '1000 4th Ave, Seattle, WA, 98104',
-        pickup_phone_number: '+16505555555',
-        dropoff_address: '1201 3rd Ave, Seattle, WA, 98101',
-        dropoff_phone_number: '+16505555555'
-    })
-    .then(res => { //log the data
-        console.log(res.data)
-        return true
-    })
-    .catch(err => { //catch errors
-        console.log(err)
-    })
+    console.log(items, pickupAddress, dropoffAddress)
+
+    // //set the Drive API client IDs and secrets
+    // const client = new DoorDashClient.DoorDashClient(accessKey)
+
+    // //send a createDelivery object to DoorDash to create a delivery
+    // const response = client.createDelivery({
+    //     "items": itemsObj,
+    //     external_delivery_id: externalDeliveryID,
+    //     pickup_address: '1000 4th Ave, Seattle, WA, 98104',
+    //     pickup_phone_number: '+16505555555',
+    //     dropoff_address: '1201 3rd Ave, Seattle, WA, 98101',
+    //     dropoff_phone_number: '+16505555555'
+    // })
+    // .then(res => { //log the data
+    //     console.log(res.data)
+    //     return true
+    // })
+    // .catch(err => { //catch errors
+    //     console.log(err)
+    // })
 
 })
 
+//-----
 
 //listen for GET requests on the /get-delivery-status endpoint 
 app.get('/get-delivery-status', async (req, res) => {
@@ -207,6 +186,8 @@ app.get('/get-delivery-status', async (req, res) => {
     res.redirect('/')
 
 })
+
+//-----
 
 //listen for PUT requests on the /cancel-delivery endpoint
 app.put('/cancel-delivery', async (req, res) => {
@@ -254,6 +235,55 @@ app.listen(process.env.PORT || PORT, (err)=>{
 
 //     const response = await client.updateDelivery({
 
+//     })
+
+// })
+
+//-----
+
+// //listen for POST requests from the /create-delivery-quote endpoint
+// app.post('/create-delivery-quote', async (req,res) => {
+
+//     //set the Drive API client IDs and secrets
+//     const client = new DoorDashClient.DoorDashClient(accessKey)
+
+//     //send formatted addresses and phone numbers to Drive API to receive a quote
+//     const response = await client.deliveryQuote({
+//         external_delivery_id: externalDeliveryID,
+//         pickup_address: '1000 4th Ave, Seattle, WA, 98104',
+//         pickup_phone_number: '+16505555555',
+//         pickup_business_name: 'example store',
+//         dropoff_address: '1201 3rd Ave, Seattle, WA, 98101',
+//         dropoff_phone_number: '+16505554555'
+//     })
+//     .then(response => { //log the data + respond
+//         console.log(response.data)
+//         res.send(response)
+//     })
+//     .catch(err => { //catch errors
+//         console.log(err)
+//     })
+
+// })
+
+//-----
+
+// //listen for POST requests on the /accept-quote endpoint
+// app.post('/accept-quote', async (req, res) => {
+
+//     //set the Drive API client IDs and secrets
+//     const client = new DoorDashClient.DoorDashClient(accessKey)
+
+//     // send delivery-id to Drive API to accept the quote
+//     const response = await client.deliveryQuoteAccept(
+//         externalDeliveryID
+//     )
+//     .then(response => { // log the data + respond
+//         console.log(response.data)
+//         res.send(response)
+//     })
+//     .catch(err => { //catch errors
+//         console.log(err)
 //     })
 
 // })

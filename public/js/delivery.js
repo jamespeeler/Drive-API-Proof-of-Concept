@@ -1,12 +1,42 @@
+//------------------------------------------------------------------
+//Set up event listeners
+//------------------------------------------------------------------
+
 let orderButton = document.getElementById('orderBtn') //make an 'orderButton' variable which grabs the "order button" from EJS/HTML and add a click event listener
 orderButton.addEventListener('click', createDelivery)// orderButton.addEventListener('click', createDelivery)
 
-//create a 'getFormValues' function that will grab all of the form values and combine them into an object
+//------------------------------------------------------------------
+//Set up addresses object
+//------------------------------------------------------------------
+
+const addressesObject = {
+    branch1: {
+        street: "123 Example Street",
+        cityName: "Kissimmee, FL",
+        zipCode: "34746"
+    },
+    branch2: {
+        street: "345 Sample Road",
+        cityName: "Poinciana, FL",
+        zipCode: "33837"
+    },
+    branch3: {
+        street: "678 Model Blvd",
+        cityName: "Orlando, FL",
+        zipCode: "32789"
+    }
+}
+
+//------------------------------------------------------------------
+//Set up functions
+//------------------------------------------------------------------
+
+//create a 'getFormValues' function that will grab all of the items and form values and combine them into an object
 function getFormValues(){
 
     const inputContainer = document.getElementById('orderItems') //set 'inputContainer' to the WHOLE table
-    const checkboxList = inputContainer.querySelectorAll('.item') //set 'checkboxList' to be ALL of the checkbox elements
-    const checkboxArray = Array.from(checkboxList) //set 'fieldArray' to be an array from 'fieldList'
+    const itemList = inputContainer.querySelectorAll('.item') //set 'itemList' to be ALL of the checkbox elements
+    const itemArray = Array.from(itemList) //set 'fieldArray' to be an array from 'fieldList'
 
     const quantityList = inputContainer.querySelectorAll('.quantity') //set 'quantityList' to ALL of the '.quantity' elements
     const quantityArray = Array.from(quantityList) //make an array from 'quantityList'
@@ -24,9 +54,9 @@ function getFormValues(){
 
     let payload = [] //create an empty payload object to combine the data into
 
-    for (let i = 0; i < checkboxArray.length; i++){ //loop checkboxArray.length number of times
+    for (let i = 0; i < itemArray.length; i++){ //loop checkboxArray.length number of times
         let currentObj = {} //initialize an object to push into the payload
-        currentObj['name'] = checkboxArray[i].dataset.item //key 'item' is equal to the item pulled from HTML
+        currentObj['name'] = itemArray[i].dataset.item //key 'item' is equal to the item pulled from HTML
         currentObj['quantity']= quantityValues[i] //key 'amount' is equal to the user-inputted number from HTML
         payload.push(currentObj) //push the 'currentObj' object into 'payload'
     }
@@ -38,33 +68,68 @@ function getFormValues(){
     return payload
 }
 
+//-----
+
+//create a 'getSelectionData' function that will grab the data from the 'select' dropdown menus and return some address data
+function getAddressData(){
+
+    //set two variables, each grabbing the individual select elements
+    let currentLocationSelect = document.getElementById('currentLocationSelect')
+    let deliveringLocationSelect = document.getElementById('deliveringLocationSelect')
+
+    //set two variables, each one grabbing the relative index of the currently selected option
+    let currentLocationSelectIndex = currentLocationSelect.selectedIndex
+    let deliveringLocationSelectIndex = deliveringLocationSelect.selectedIndex
+
+    //set two variables, each one grabbing the first index from the classList of the select menu (which contains the branch number)
+    let currentLocation = currentLocationSelect[currentLocationSelectIndex].classList[1]
+    let deliveringLocation = deliveringLocationSelect[deliveringLocationSelectIndex].classList[1]
+
+    //set up a payload array to push data into
+    let payload = []
 
 
+    //if statements which check the 'currentLocation' and 'deliveringLocation' variables and push data based on the response
+    if (currentLocation === 'branch1'){
+        payload.push({currentLocation: addressesObject.branch1})
+    } else if (currentLocation === 'branch2'){
+        payload.push({currentLocation: addressesObject.branch2})
+    } else {
+        payload.push({currentLocation: addressesObject.branch3})
+    }
 
+    if (deliveringLocation === 'branch1'){
+        payload.push({deliveringLocation: addressesObject.branch1})
+    } else if (deliveringLocation === 'branch2'){
+        payload.push({deliveringLocation: addressesObject.branch2})
+    } else {
+        payload.push({deliveringLocation: addressesObject.branch3})
+    }
+
+    console.log(payload)
+
+    return payload
+}
+
+//-----
 
 //create a 'createDelivery' function that will send a post request to DoorDash and create a new delivery
 async function createDelivery(){
-    const payload = getFormValues() //use the getFormValues function and store the result in 'payload'
+
+    const payload = [getFormValues(), getAddressData()]
+    
     const finalPayload = JSON.stringify(payload) //stringify the payload, and store that into 'finalPayload
 
-    // const formInput = document.querySelector('form') //make a formInput const, and store the form elements into it
-    // const menuBoxes = document.querySelectorAll('input[type=checkbox]:checked') //make a 'menuBoxes' const and store ALL of the checkboxes THAT HAVE BEEN CHECKED into it
-
-    // if (formInput.checkValidity() && menuBoxes.length > 0){ //if the form has been filled out, and at least 1 check box has been ticked
-
-        const response = await fetch('/create-delivery', { //make a fetch request to the server API to create a new delivery
-            method: "POST",
-            body: finalPayload,
-            headers: {"Content-Type" : "application/json"}
-        })
-        .then((res) => {
-            return res.text()
-        })
-        .catch((err) => {
-            console.log(`Error: ${err}`)
-            return false
-        })
-    // }
-
-
+    const response = await fetch('/create-delivery', { //make a fetch request to the server API to create a new delivery
+        method: "POST",
+        body: finalPayload,
+        headers: {"Content-Type" : "application/json"}
+    })
+    .then((res) => {
+        return res.text()
+    })
+    .catch((err) => {
+        console.log(`Error: ${err}`)
+        return false
+    })
 }
