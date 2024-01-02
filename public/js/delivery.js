@@ -6,26 +6,33 @@ let orderButton = document.getElementById('orderBtn') //make an 'orderButton' va
 orderButton.addEventListener('click', createDelivery)// orderButton.addEventListener('click', createDelivery)
 
 //------------------------------------------------------------------
-//Set up addresses object
+//Set up local addresses and menuItems objects for testing when I don't have internet access
 //------------------------------------------------------------------
 
-const addressesObject = {
-    branch1: {
-        street: "123 Example Street",
-        cityName: "Kissimmee, FL",
-        zipCode: "34746"
-    },
-    branch2: {
-        street: "345 Sample Road",
-        cityName: "Poinciana, FL",
-        zipCode: "33837"
-    },
-    branch3: {
-        street: "678 Model Blvd",
-        cityName: "Orlando, FL",
-        zipCode: "32789"
-    }
-}
+// const addressesObject = {
+//     branch1: {
+//         street: "123 Example Street",
+//         cityName: "Kissimmee, FL",
+//         zipCode: "34746",
+//         phoneNumber: "+14078680001"
+//     },
+//     branch2: {
+//         street: "345 Sample Road",
+//         cityName: "Poinciana, FL",
+//         zipCode: "33837",
+//         phoneNumber: "+14078680002"
+//     },
+//     branch3: {
+//         street: "678 Model Blvd",
+//         cityName: "Orlando, FL",
+//         zipCode: "32789",
+//         phoneNumber: "+14078680003"
+//     }
+// }
+
+// const menuItems = {
+//     items : [ 'milk', 'cups', 'lids', 'straws', 'napkins' ]
+// }
 
 //------------------------------------------------------------------
 //Set up functions
@@ -63,7 +70,7 @@ function getFormValues(){
 
     payload = payload.filter(e => e.quantity !== 0) //filter 'payload' to only include entries with amounts greater than 0
 
-    console.log(payload)
+    console.log(`getFormValues payload from delivery.js:`, payload)
 
     return payload
 }
@@ -88,25 +95,31 @@ function getAddressData(){
     //set up a payload array to push data into
     let payload = []
 
+    payload.push({
+        currentLocation: currentLocation,
+        deliveringLocation: deliveringLocation
+    })
+
 
     //if statements which check the 'currentLocation' and 'deliveringLocation' variables and push data based on the response
-    if (currentLocation === 'branch1'){
-        payload.push({currentLocation: addressesObject.branch1})
-    } else if (currentLocation === 'branch2'){
-        payload.push({currentLocation: addressesObject.branch2})
-    } else {
-        payload.push({currentLocation: addressesObject.branch3})
-    }
+    //this codeblock is used when i don't have internet access
+    // if (currentLocation === 'branch1'){
+    //     payload.push({currentLocation: addressesObject.branch1})
+    // } else if (currentLocation === 'branch2'){
+    //     payload.push({currentLocation: addressesObject.branch2})
+    // } else {
+    //     payload.push({currentLocation: addressesObject.branch3})
+    // }
 
-    if (deliveringLocation === 'branch1'){
-        payload.push({deliveringLocation: addressesObject.branch1})
-    } else if (deliveringLocation === 'branch2'){
-        payload.push({deliveringLocation: addressesObject.branch2})
-    } else {
-        payload.push({deliveringLocation: addressesObject.branch3})
-    }
+    // if (deliveringLocation === 'branch1'){
+    //     payload.push({deliveringLocation: addressesObject.branch1})
+    // } else if (deliveringLocation === 'branch2'){
+    //     payload.push({deliveringLocation: addressesObject.branch2})
+    // } else {
+    //     payload.push({deliveringLocation: addressesObject.branch3})
+    // }
 
-    console.log(payload)
+    console.log(`getSelectionData payload from delivery.js:`, payload)
 
     return payload
 }

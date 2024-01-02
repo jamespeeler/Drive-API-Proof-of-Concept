@@ -27,33 +27,46 @@ const { log } = require('console') //Drive API needs console access
 const jwt = require('jsonwebtoken') //use jwt for API auth
 
 //make an externalDeliveryID variable because i was getting tired of manually changing it every time i needed to test something
-let externalDeliveryID = 'D-22365'
+let externalDeliveryID = 'D-23365'
 
 //------------------------------------------------------------------
-//MongoDB connection
+//MongoDB connection and functions
 //------------------------------------------------------------------
 
-//Connect to Database
-// MongoClient.connect(uri)
-//     .then(client => {
-//         console.log(`Connected to ${dbName} Database`)
-//         db = client.db(dbName)
-//     })
+// Connect to Database
+MongoClient.connect(uri)
+    .then(client => {
+        console.log(`Connected to "${dbName}" Database`)
+        db = client.db(dbName)
+    })
 
 //-----
 
 // async function run() {
 //     try {
-//         let database = client.db('branch-connector-database');
+//         let database = mongoDBClient.db('branch-connector-database');
 //         let menuItems = database.collection('menu-items');
         
 //         console.log(menuItems.find())
 
 //     } finally {
 //       // Ensures that the client will close when you finish/error
-//       await client.close();
+//       await mongoDBClient.close();
 //     }
 //   }
+
+// async function getAddressesFromDB() {
+//     try {
+//         let database = mongoDBClient.db('branch-connector-database')
+//         let addresses = database.collection('addresses')
+//         let menuItems = database.collection('menu-items')
+
+//         console.log(addresses.find(), menuItems.find())
+
+//     } finally {
+//         await mongoDBClient.close()
+//     }
+// }
 
 //-----
 
@@ -123,7 +136,12 @@ app.use(express.json()) //render some stuff as json
 //------------------------------------------------------------------
 
 // listen for root GET requests and send HTML when requested 
-app.get('/', (req,res) => {
+app.get('/', async (req,res) => {
+
+    //This codeblock grabs all the menu items from DB for putting into ejs
+    // const menuItemsObj = await db.collection('menu-items').find().toArray()
+    // let menuItems = menuItemsObj[0].items
+
     res.sendFile(__dirname + '/views/index.html')
 })
 
@@ -132,29 +150,41 @@ app.get('/', (req,res) => {
 //listen for POST requests on the /create-delivery endpoint
 app.post('/create-delivery', async (req, res) => {
 
-    //make an 'itemsObj' variable which pulls item data from the request body
-    let dataObj = {
-        items: req.body[0],
-        addresses: req.body[1]
+    //This codeblock grabs ALL the business addresses from DB
+    const addressesObj = await db.collection('addresses').find().toArray()
+    let addresses = JSON.stringify(addressesObj[0].addresses) 
+
+    //make an 'reqDataObj' variable which pulls item data from the request body
+    let reqDataObj = {
+        items: req.body[0], //this is the items the user requested
+        locations: req.body[1] //these are the user-selected addresses
     }
 
-    let items = dataObj.items
-    let pickupAddress = dataObj.addresses[1].deliveringLocation
-    let dropoffAddress = dataObj.addresses[0].currentLocation
+    console.log(
+        addresses,
+        reqDataObj.items,
+        reqDataObj.locations
+    )
 
-    console.log(items, pickupAddress, dropoffAddress)
+    // let items = reqDataObj.items
+    // let pickupAddress = `${pickupLocation.street}, ${pickupLocation.cityName}, ${pickupLocation.zipCode}`
+    // let dropoffAddress = `${dropoffLocation.street}, ${dropoffLocation.cityName}, ${dropoffLocation.zipCode}`
+    // let pickupPhoneNumber = pickupLocation.phoneNumber
+    // let dropoffPhoneNumber = dropoffLocation.phoneNumber
+
+    
 
     // //set the Drive API client IDs and secrets
     // const client = new DoorDashClient.DoorDashClient(accessKey)
 
     // //send a createDelivery object to DoorDash to create a delivery
     // const response = client.createDelivery({
-    //     "items": itemsObj,
+    //     "items": items,
     //     external_delivery_id: externalDeliveryID,
-    //     pickup_address: '1000 4th Ave, Seattle, WA, 98104',
-    //     pickup_phone_number: '+16505555555',
-    //     dropoff_address: '1201 3rd Ave, Seattle, WA, 98101',
-    //     dropoff_phone_number: '+16505555555'
+    //     pickup_address: pickupAddress,
+    //     pickup_phone_number: pickupPhoneNumber,
+    //     dropoff_address: dropoffAddress,
+    //     dropoff_phone_number: dropoffPhoneNumber
     // })
     // .then(res => { //log the data
     //     console.log(res.data)
