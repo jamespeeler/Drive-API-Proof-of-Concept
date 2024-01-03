@@ -33,6 +33,8 @@ let externalDeliveryID = 'D-23365'
 //MongoDB connection and functions
 //------------------------------------------------------------------
 
+
+
 // Connect to Database
 MongoClient.connect(uri)
     .then(client => {
@@ -151,48 +153,48 @@ app.get('/', async (req,res) => {
 app.post('/create-delivery', async (req, res) => {
 
     //This codeblock grabs ALL the business addresses from DB
-    const addressesObj = await db.collection('addresses').find().toArray()
-    let addresses = JSON.stringify(addressesObj[0].addresses) 
+    let addressesObj = await db.collection('addresses').find().toArray()
+    let addresses = addressesObj[0].addresses
+    let stringifiedAddresses = JSON.stringify(addresses)
 
     //make an 'reqDataObj' variable which pulls item data from the request body
     let reqDataObj = {
-        items: req.body[0], //this is the items the user requested
+        items: req.body[0], //these are the items the user requested
         locations: req.body[1] //these are the user-selected addresses
     }
 
-    console.log(
-        addresses,
-        reqDataObj.items,
-        reqDataObj.locations
-    )
+    let items = reqDataObj.items
 
-    // let items = reqDataObj.items
-    // let pickupAddress = `${pickupLocation.street}, ${pickupLocation.cityName}, ${pickupLocation.zipCode}`
-    // let dropoffAddress = `${dropoffLocation.street}, ${dropoffLocation.cityName}, ${dropoffLocation.zipCode}`
-    // let pickupPhoneNumber = pickupLocation.phoneNumber
-    // let dropoffPhoneNumber = dropoffLocation.phoneNumber
+    let currentLocation = JSON.parse(JSON.stringify(reqDataObj.locations[0].currentLocation))
+    let deliveringLocation = JSON.parse(JSON.stringify(reqDataObj.locations[0].deliveringLocation))
 
-    
+    let pickupObj = JSON.parse(JSON.stringify(addressesObj[0].addresses[deliveringLocation]))
+    let dropoffObj = JSON.parse(JSON.stringify(addressesObj[0].addresses[currentLocation]))
 
-    // //set the Drive API client IDs and secrets
-    // const client = new DoorDashClient.DoorDashClient(accessKey)
+    let pickupAddress = `${pickupObj.street}, ${pickupObj.cityName}, ${pickupObj.zipCode}`
+    let pickupPhoneNumber = pickupObj.phoneNumber
+    let dropoffAddress = `${dropoffObj.street}, ${dropoffObj.cityName}, ${dropoffObj.zipCode}`
+    let dropoffPhoneNumber = dropoffObj.phoneNumber
 
-    // //send a createDelivery object to DoorDash to create a delivery
-    // const response = client.createDelivery({
-    //     "items": items,
-    //     external_delivery_id: externalDeliveryID,
-    //     pickup_address: pickupAddress,
-    //     pickup_phone_number: pickupPhoneNumber,
-    //     dropoff_address: dropoffAddress,
-    //     dropoff_phone_number: dropoffPhoneNumber
-    // })
-    // .then(res => { //log the data
-    //     console.log(res.data)
-    //     return true
-    // })
-    // .catch(err => { //catch errors
-    //     console.log(err)
-    // })
+    //set the Drive API client IDs and secrets
+    const client = new DoorDashClient.DoorDashClient(accessKey)
+
+    //send a createDelivery object to DoorDash to create a delivery
+    const response = client.createDelivery({
+        "items": items,
+        external_delivery_id: externalDeliveryID,
+        pickup_address: pickupAddress,
+        pickup_phone_number: pickupPhoneNumber,
+        dropoff_address: dropoffAddress,
+        dropoff_phone_number: dropoffPhoneNumber
+    })
+    .then(res => { //log the data
+        console.log(res.data)
+        return true
+    })
+    .catch(err => { //catch errors
+        console.log(err)
+    })
 
 })
 
