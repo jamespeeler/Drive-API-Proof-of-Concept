@@ -141,8 +141,19 @@ app.use(express.json()) //render some stuff as json
 app.get('/', async (req,res) => {
 
     //This codeblock grabs all the menu items from DB for putting into ejs
-    // const menuItemsObj = await db.collection('menu-items').find().toArray()
-    // let menuItems = menuItemsObj[0].items
+    const menuItemsObj = await db.collection('menu-items').find().toArray()
+    let menuItems = menuItemsObj[0].items
+
+    //This grabs ALL the addresses from the DB
+    let addressesObj = await db.collection('addresses').find().toArray()
+
+    console.log(
+        menuItemsObj,
+        addressesObj,
+        menuItems
+    );
+
+
 
     res.sendFile(__dirname + '/views/index.html')
 })
@@ -154,23 +165,26 @@ app.post('/create-delivery', async (req, res) => {
 
     //This codeblock grabs ALL the business addresses from DB
     let addressesObj = await db.collection('addresses').find().toArray()
-    let addresses = addressesObj[0].addresses
-    let stringifiedAddresses = JSON.stringify(addresses)
 
-    //make an 'reqDataObj' variable which pulls item data from the request body
+    //make an 'reqDataObj' variable which pulls item and address data from the request body
     let reqDataObj = {
         items: req.body[0], //these are the items the user requested
         locations: req.body[1] //these are the user-selected addresses
     }
 
+    //grab the items out of reqDataObj
     let items = reqDataObj.items
 
+    //grab the two user-selected locations out of reqDataObj and store them into variables
     let currentLocation = JSON.parse(JSON.stringify(reqDataObj.locations[0].currentLocation))
     let deliveringLocation = JSON.parse(JSON.stringify(reqDataObj.locations[0].deliveringLocation))
 
+    //go into the database addresses and pull out the addresses of the two user-selected addresses
     let pickupObj = JSON.parse(JSON.stringify(addressesObj[0].addresses[deliveringLocation]))
     let dropoffObj = JSON.parse(JSON.stringify(addressesObj[0].addresses[currentLocation]))
 
+    //create strings from the newly created pickupObj and dropoffObj variables to pass
+    //into the DoorDash API; addresses and phone numbers
     let pickupAddress = `${pickupObj.street}, ${pickupObj.cityName}, ${pickupObj.zipCode}`
     let pickupPhoneNumber = pickupObj.phoneNumber
     let dropoffAddress = `${dropoffObj.street}, ${dropoffObj.cityName}, ${dropoffObj.zipCode}`
