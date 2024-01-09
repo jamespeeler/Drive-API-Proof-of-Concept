@@ -12,6 +12,14 @@ let deliveringStreet = document.querySelector('.deliveringStreet')
 let deliveringCity = document.querySelector('.deliveringCityName')
 let deliveringZip = document.querySelector('.deliveringZipCode')
 
+//need to make an api call to the server to create an addresses object on page load
+
+//need to populate html spans with address data on select change 
+
+//grabbing the class information from html, referencing that against the addresses object, then using that 
+//to populate the spans, similar to how it works when the server pulls the info from the db
+//and formats it for doordash 
+
 let addresses = {
     branch1: {
         street: "123 Example Street",

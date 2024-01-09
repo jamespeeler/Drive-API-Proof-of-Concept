@@ -23,7 +23,7 @@ const PORT = 2121 //set port, will need to change this later
 
 const url = require('url') //need url access
 const DoorDashClient = require('@doordash/sdk') //use the DoorDash Drive API
-const { log } = require('console') //Drive API needs console access
+const { log } = require('console') //Drive API needs console access (i think i accidentally added this, and it isn't even necessary)
 const jwt = require('jsonwebtoken') //use jwt for API auth
 
 //make an externalDeliveryID variable because i was getting tired of manually changing it every time i needed to test something
@@ -129,7 +129,7 @@ if (token) {
 //------------------------------------------------------------------
 
 app.set('view engine', 'ejs') //use ejs for HTML templates
-app.use(express.static('public')) //use a public folder to send static files
+app.use(express.static('public/')) //use a public folder to send static files
 app.use(express.urlencoded({ extended: true })) //middleware to do something?
 app.use(express.json()) //render some stuff as json
 
@@ -147,15 +147,48 @@ app.get('/', async (req,res) => {
     //This grabs ALL the addresses from the DB
     let addressesObj = await db.collection('addresses').find().toArray()
 
-    console.log(
-        menuItemsObj,
-        addressesObj,
-        menuItems
-    );
-
-
+    // console.log(
+    //     'console log from server.js codeblock line 141',
+    //     menuItemsObj,
+    //     addressesObj,
+    //     menuItems
+    // )
 
     res.sendFile(__dirname + '/views/index.html')
+    
+    
+})
+
+//-----
+
+//maybe this will be used to send address data to local storage? or similar?
+app.get('/get-addresses', async (req, res) => {
+
+    let addressesObj = await db.collection('addresses').find().toArray()
+    let payload = addressesObj[0].addresses
+    console.log(payload)
+
+    //grab the items out of reqDataObj
+    // let items = reqDataObj.items
+
+    res.send(payload)
+    res.end()
+
+    // //grab the two user-selected locations out of reqDataObj and store them into variables
+    // let currentLocation = JSON.parse(JSON.stringify(reqDataObj.locations[0].currentLocation))
+    // let deliveringLocation = JSON.parse(JSON.stringify(reqDataObj.locations[0].deliveringLocation))
+
+    // //go into the database addresses and pull out the addresses of the two user-selected addresses
+    // let pickupObj = JSON.parse(JSON.stringify(addressesObj[0].addresses[deliveringLocation]))
+    // let dropoffObj = JSON.parse(JSON.stringify(addressesObj[0].addresses[currentLocation]))
+
+    // //create strings from the newly created pickupObj and dropoffObj variables to pass
+    // //into the DoorDash API; addresses and phone numbers
+    // let pickupAddress = `${pickupObj.street}, ${pickupObj.cityName}, ${pickupObj.zipCode}`
+    // let pickupPhoneNumber = pickupObj.phoneNumber
+    // let dropoffAddress = `${dropoffObj.street}, ${dropoffObj.cityName}, ${dropoffObj.zipCode}`
+    // let dropoffPhoneNumber = dropoffObj.phoneNumber
+
 })
 
 //-----
@@ -210,6 +243,8 @@ app.post('/create-delivery', async (req, res) => {
         console.log(err)
     })
 
+    res.end()
+
 })
 
 //-----
@@ -230,6 +265,8 @@ app.get('/get-delivery-status', async (req, res) => {
     })
 
     res.redirect('/')
+
+    res.end()
 
 })
 
@@ -252,6 +289,7 @@ app.put('/cancel-delivery', async (req, res) => {
         console.log(err);
     })
 
+    res.end()
 })
 
 //------------------------------------------------------------------
