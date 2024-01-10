@@ -149,17 +149,14 @@ app.get('/', async (req,res) => {
         "items": menuItems
     }
 
-    console.log(
-        'console log from server.js codeblock line 141',
-        "itemsObj",
-        itemsObj,
-        "addressesObj",
-        addressesObj,
-        "menuItems",
-        menuItems,
-        "addresses",
-        addresses
-    )
+    // console.log(
+    //     'console log from get block line 139: payload + values',
+    //     payload,
+    //     'payload[addresses]',
+    //     payload["addresses"],
+    //     'payload[items]',
+    //     payload["items"]
+    // )
 
     res.render('index.ejs', payload)
 
