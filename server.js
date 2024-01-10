@@ -33,8 +33,6 @@ let externalDeliveryID = 'D-23365'
 //MongoDB connection and functions
 //------------------------------------------------------------------
 
-
-
 // Connect to Database
 MongoClient.connect(uri)
     .then(client => {
@@ -140,21 +138,32 @@ app.use(express.json()) //render some stuff as json
 // listen for root GET requests and send HTML when requested 
 app.get('/', async (req,res) => {
 
-    //This codeblock grabs all the menu items from DB for putting into ejs
-    const menuItemsObj = await db.collection('menu-items').find().toArray()
-    let menuItems = menuItemsObj[0].items
-
-    //This grabs ALL the addresses from the DB
+    //This codeblock grabs all the addresses and menu items from DB for putting into ejs
     let addressesObj = await db.collection('addresses').find().toArray()
+    let itemsObj = await db.collection('menu-items').find().toArray()
+    let addresses = addressesObj[0].addresses
+    let menuItems = itemsObj[0].items
 
-    // console.log(
-    //     'console log from server.js codeblock line 141',
-    //     menuItemsObj,
-    //     addressesObj,
-    //     menuItems
-    // )
+    let payload = {
+        "addresses": addresses,
+        "items": menuItems
+    }
 
-    res.sendFile(__dirname + '/views/index.html')
+    console.log(
+        'console log from server.js codeblock line 141',
+        "itemsObj",
+        itemsObj,
+        "addressesObj",
+        addressesObj,
+        "menuItems",
+        menuItems,
+        "addresses",
+        addresses
+    )
+
+    res.render('index.ejs', payload)
+
+    // res.sendFile(__dirname + '/views/index.html')
     
     
 })
@@ -166,7 +175,7 @@ app.get('/get-addresses', async (req, res) => {
 
     let addressesObj = await db.collection('addresses').find().toArray()
     let payload = addressesObj[0].addresses
-    console.log(payload)
+    console.log('payload console log from get-addresses code block line 173 server.js', payload)
 
     //grab the items out of reqDataObj
     // let items = reqDataObj.items

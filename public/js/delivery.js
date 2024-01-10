@@ -1,5 +1,9 @@
+//------------------------------------------------------------------
+//Check local storage for specific entry, and set items if necessary
+//------------------------------------------------------------------
+
 if (!localStorage.getItem('addresses')){
-    console.log("No 'addresses' object in local storage... creating object now")
+    console.log("No 'addresses' object in local storage. Creating object now...")
     getAddresses()
 } else {
     console.log("'addresses' object already exists, no need to do anything")
@@ -18,9 +22,6 @@ async function getAddresses(){
     console.log("'addresses' object successfully created in local storage")
     
 }
-
-
-
 
 
 //------------------------------------------------------------------
