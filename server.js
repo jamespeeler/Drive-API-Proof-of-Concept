@@ -40,45 +40,6 @@ MongoClient.connect(uri)
         db = client.db(dbName)
     })
 
-//-----
-
-// async function run() {
-//     try {
-//         let database = mongoDBClient.db('branch-connector-database');
-//         let menuItems = database.collection('menu-items');
-        
-//         console.log(menuItems.find())
-
-//     } finally {
-//       // Ensures that the client will close when you finish/error
-//       await mongoDBClient.close();
-//     }
-//   }
-
-// async function getAddressesFromDB() {
-//     try {
-//         let database = mongoDBClient.db('branch-connector-database')
-//         let addresses = database.collection('addresses')
-//         let menuItems = database.collection('menu-items')
-
-//         console.log(addresses.find(), menuItems.find())
-
-//     } finally {
-//         await mongoDBClient.close()
-//     }
-// }
-
-//-----
-
-// run().catch(console.dir)
-
-//-----
-
-// //Set up MongoDB variables
-// let dbConnectionStr = process.env.DB_STRING,
-//     dbName = 'branch-connector-database',
-//     db
-
 //------------------------------------------------------------------
 //DoorDash Drive API setup
 //------------------------------------------------------------------
@@ -135,7 +96,7 @@ app.use(express.json()) //render some stuff as json
 //Listen for request calls
 //------------------------------------------------------------------
 
-// listen for root GET requests and send HTML when requested 
+// listen for root GET requests and render EJS when requested 
 app.get('/', async (req,res) => {
 
     //This codeblock grabs all the addresses and menu items from DB for putting into ejs
@@ -149,39 +110,20 @@ app.get('/', async (req,res) => {
         "items": menuItems
     }
 
-    res.render('index.ejs', payload) //EJS IS WORKING AGHHHAKSJFHWAEJB
+    res.render('index.ejs', payload) 
 
-    // res.sendFile(__dirname + '/views/index.html')
 })
 
 //-----
 
-//maybe this will be used to send address data to local storage? or similar?
+//Listen for GET requests on the /get-addresses endpoint
 app.get('/get-addresses', async (req, res) => {
 
     let addressesObj = await db.collection('addresses').find().toArray()
     let payload = addressesObj[0].addresses
 
-    //grab the items out of reqDataObj
-    // let items = reqDataObj.items
-
     res.send(payload)
     res.end()
-
-    // //grab the two user-selected locations out of reqDataObj and store them into variables
-    // let currentLocation = JSON.parse(JSON.stringify(reqDataObj.locations[0].currentLocation))
-    // let deliveringLocation = JSON.parse(JSON.stringify(reqDataObj.locations[0].deliveringLocation))
-
-    // //go into the database addresses and pull out the addresses of the two user-selected addresses
-    // let pickupObj = JSON.parse(JSON.stringify(addressesObj[0].addresses[deliveringLocation]))
-    // let dropoffObj = JSON.parse(JSON.stringify(addressesObj[0].addresses[currentLocation]))
-
-    // //create strings from the newly created pickupObj and dropoffObj variables to pass
-    // //into the DoorDash API; addresses and phone numbers
-    // let pickupAddress = `${pickupObj.street}, ${pickupObj.cityName}, ${pickupObj.zipCode}`
-    // let pickupPhoneNumber = pickupObj.phoneNumber
-    // let dropoffAddress = `${dropoffObj.street}, ${dropoffObj.cityName}, ${dropoffObj.zipCode}`
-    // let dropoffPhoneNumber = dropoffObj.phoneNumber
 
 })
 
@@ -296,72 +238,3 @@ app.listen(process.env.PORT || PORT, (err)=>{
     }
     console.log(`Server running on port ${PORT}`)
 })
-
-//------------------------------------------------------------------
-//Unused code that might become useful in future versions of the app
-//------------------------------------------------------------------
-
-//listen for PATCH requests on the /update-delivery endpoint - not currently running
-// app.patch('/update-delivery', async (req, res) => {
-
-//     //set the Drive API client IDs and secrets
-//     const client = new DoorDashClient.DoorDashClient({
-//         "developer_id": process.env.DEVELOPER_ID,
-//         "key_id": process.env.KEY_ID,
-//         "signing_secret": process.env.SIGNING_SECRET        
-//     })
-
-//     const response = await client.updateDelivery({
-
-//     })
-
-// })
-
-//-----
-
-// //listen for POST requests from the /create-delivery-quote endpoint
-// app.post('/create-delivery-quote', async (req,res) => {
-
-//     //set the Drive API client IDs and secrets
-//     const client = new DoorDashClient.DoorDashClient(accessKey)
-
-//     //send formatted addresses and phone numbers to Drive API to receive a quote
-//     const response = await client.deliveryQuote({
-//         external_delivery_id: externalDeliveryID,
-//         pickup_address: '1000 4th Ave, Seattle, WA, 98104',
-//         pickup_phone_number: '+16505555555',
-//         pickup_business_name: 'example store',
-//         dropoff_address: '1201 3rd Ave, Seattle, WA, 98101',
-//         dropoff_phone_number: '+16505554555'
-//     })
-//     .then(response => { //log the data + respond
-//         console.log(response.data)
-//         res.send(response)
-//     })
-//     .catch(err => { //catch errors
-//         console.log(err)
-//     })
-
-// })
-
-//-----
-
-// //listen for POST requests on the /accept-quote endpoint
-// app.post('/accept-quote', async (req, res) => {
-
-//     //set the Drive API client IDs and secrets
-//     const client = new DoorDashClient.DoorDashClient(accessKey)
-
-//     // send delivery-id to Drive API to accept the quote
-//     const response = await client.deliveryQuoteAccept(
-//         externalDeliveryID
-//     )
-//     .then(response => { // log the data + respond
-//         console.log(response.data)
-//         res.send(response)
-//     })
-//     .catch(err => { //catch errors
-//         console.log(err)
-//     })
-
-// })

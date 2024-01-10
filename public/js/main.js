@@ -78,27 +78,3 @@ function insertDeliveringAddress(){
     deliveringZip.innerHTML = addresses[branchNumber].zipCode
 
 }
-
-
-
-
-
-// Old code, prolly won't come back but I'm a hoarder while working on projects
-
-// let addresses = {
-//     branch1: {
-//         street: "123 Example Street",
-//         cityName: "Kissimmee, FL",
-//         zipCode: "34746"
-//     },
-//     branch2: {
-//         street: "345 Sample Road",
-//         cityName: "Poinciana, FL",
-//         zipCode: "33837"
-//     },
-//     branch3: {
-//         street: "678 Model Blvd",
-//         cityName: "Orlando, FL",
-//         zipCode: "32789"
-//     }
-// }
