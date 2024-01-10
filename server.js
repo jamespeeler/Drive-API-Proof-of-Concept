@@ -149,20 +149,9 @@ app.get('/', async (req,res) => {
         "items": menuItems
     }
 
-    // console.log(
-    //     'console log from get block line 139: payload + values',
-    //     payload,
-    //     'payload[addresses]',
-    //     payload["addresses"],
-    //     'payload[items]',
-    //     payload["items"]
-    // )
-
-    res.render('index.ejs', payload)
+    res.render('index.ejs', payload) //EJS IS WORKING AGHHHAKSJFHWAEJB
 
     // res.sendFile(__dirname + '/views/index.html')
-    
-    
 })
 
 //-----
@@ -172,7 +161,6 @@ app.get('/get-addresses', async (req, res) => {
 
     let addressesObj = await db.collection('addresses').find().toArray()
     let payload = addressesObj[0].addresses
-    console.log('payload console log from get-addresses code block line 173 server.js', payload)
 
     //grab the items out of reqDataObj
     // let items = reqDataObj.items
