@@ -80,8 +80,11 @@
                         </thead>
                         <tbody>
                             <% for (let i = 0; i < items.length; i++) { %>
+                                <% let item = items[i].split('') %>
+                                <% item[0] = item[0].toUpperCase() %>
+                                <% item = item.join('') %>
                                 <tr>
-                                    <td name="item" data-item="<%= items[i] %>" class="item <%= items[i] + 'Select' %>"><%= items[i] %></td>
+                                    <td name="item" data-item="<%= items[i] %>" class="item <%= items[i] + 'Select' %>"><%= item %></td>
                                     <td><input type="number" name="quantity" class="quantity <%= items[i] + 'Quantity' %>" placeholder="Leave blank if zero"></td>
                                 </tr>
                             <% } %>
@@ -96,9 +99,16 @@
 <!-- This section of the app is a button -->
 
             <section class="orderButtonContainer">
+                <!-- <a class="checkOrderAnchor" href="/order-confirmation">Check order status</a> -->
                 <section class="placeOrder">
                     <button id="orderBtn">Place Order</button>
                 </section>
+            </section>
+
+<!-- This section of the app is an anchor -->
+
+            <section class="anchorContainer">
+                <a class="checkOrderAnchor" href="/order-confirmation">Check order status</a>
             </section>
 
         </section>

@@ -5,6 +5,8 @@
 require('dotenv').config() //use dotenv for SECRETS
 const express = require('express') //use express
 const app = express() //set express const
+const { randomUUID } = require('crypto') //i use this to create unique internal delivery id's 
+
 
 //-----
 
@@ -25,9 +27,6 @@ const url = require('url') //need url access
 const DoorDashClient = require('@doordash/sdk') //use the DoorDash Drive API
 const { log } = require('console') //Drive API needs console access (i think i accidentally added this, and it isn't even necessary)
 const jwt = require('jsonwebtoken') //use jwt for API auth
-
-//make an externalDeliveryID variable because i was getting tired of manually changing it every time i needed to test something
-let externalDeliveryID = 'D-23365'
 
 //------------------------------------------------------------------
 //MongoDB connection and functions
@@ -93,7 +92,7 @@ app.use(express.urlencoded({ extended: true })) //middleware to do something?
 app.use(express.json()) //render some stuff as json
 
 //------------------------------------------------------------------
-//Listen for request calls
+//Routing
 //------------------------------------------------------------------
 
 // listen for root GET requests and render EJS when requested 
@@ -116,6 +115,19 @@ app.get('/', async (req,res) => {
 
 //-----
 
+app.get('/order-confirmation', async (req,res) => {
+
+    let orderData = await db.collection('deliveries').find({}).sort({_id:-1}).limit(1).toArray()
+    orderData = orderData[0]
+
+    console.log(orderData)
+
+    res.render('order-confirmation.ejs', orderData)
+
+})
+
+//-----
+
 //Listen for GET requests on the /get-addresses endpoint
 app.get('/get-addresses', async (req, res) => {
 
@@ -130,7 +142,11 @@ app.get('/get-addresses', async (req, res) => {
 //-----
 
 //listen for POST requests on the /create-delivery endpoint
-app.post('/create-delivery', async (req, res) => {
+app.post('/create-delivery', async (req, res, next) => {
+
+    //make a unique delivery id per delivery
+    let ddUuid = randomUUID().slice(0,6)
+    let externalDeliveryID = `D-${ddUuid}`
 
     //This codeblock grabs ALL the business addresses from DB
     let addressesObj = await db.collection('addresses').find().toArray()
@@ -171,15 +187,35 @@ app.post('/create-delivery', async (req, res) => {
         dropoff_address: dropoffAddress,
         dropoff_phone_number: dropoffPhoneNumber
     })
-    .then(res => { //log the data
-        console.log(res.data)
-        return true
+    .then(ddResponse => {
+
+        if (ddResponse){
+            console.log('request success!')
+        } else {
+            res.end()
+        }
+
+        let data = ddResponse.data
+
+        let dbPayload = {
+            'externalDeliveryID': data.external_delivery_id,
+            'deliveryStatus': data.delivery_status,
+            'items': data.items,
+            'pickupTimeEta': data.pickup_time_estimated,
+            'dropoffTimeEta': data.dropoff_time_estimated,
+            'supportRef': data.support_reference,
+            'tracking': data.tracking_url
+        }
+
+        db.collection('deliveries').insertOne(dbPayload).then(result => {
+            console.log("data inserted into database");
+            res.redirect('/')
+        })
+
     })
     .catch(err => { //catch errors
         console.log(err)
-    })
-
-    res.end()
+    })    
 
 })
 
@@ -226,6 +262,7 @@ app.put('/cancel-delivery', async (req, res) => {
     })
 
     res.end()
+
 })
 
 //------------------------------------------------------------------

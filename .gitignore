@@ -1,8 +1,5 @@
 node_modules
 .env
-MVP.txt
-todo.txt
 newtodo.txt
-data-structure.txt
-addresses.txt
 extra-files-local-only
+todotemp.txt

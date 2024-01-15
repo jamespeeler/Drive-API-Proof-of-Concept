@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Branch Inventory Delivery Service - Order Confirmation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <section class="confirmationContainer">
+        <section class="contentContainer">
+
+            <section class="headlineContainer">
+                <h1>Order placed!</h1>
+                <h2>Order details:</h2>
+            </section>
+
+            <section class="itemsConfirmationContainer">
+                <section class="itemsConfirmationTableContainer">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (let i = 0; i < items.length; i++) { %>
+                                <% let item = items[i].name.split('') %>
+                                <% item[0] = item[0].toUpperCase() %>
+                                <% item = item.join('') %>
+                            <tr>
+                                <td name="item" class="item"><%- item %></td>
+                                <td class="confirmationQuantity"><%- items[i].quantity %></td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+
+                    </table>
+
+                </section>
+            </section>
+
+            <section class="confirmationNumberContainer">
+                <span class="orderConfirmationSpan">Order confirmation number / support reference: </span>
+                <span class="placeForOrderConfirmation"><%= supportRef %></span>
+            </section>
+
+            <section class="etaContainer">
+                <span class="etaSpan">Estimated order arrival time: </span>
+                <span class="placeForEta"><%= dropoffTimeEta %></span>
+            </section>
+            
+
+        </section>
+    </section>
+
+    <!-- <script src="/js/main.js"></script> -->
+    <!-- <script src="/js/delivery.js"></script> -->
+</body>
+</html>
