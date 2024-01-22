@@ -1,7 +1,7 @@
 
 # DoorDash Drive API Proof-of-concept
 
-This is a simple site I created using DoorDash's Drive API. The code is a bit rough-and-ready, as it is not at a place to be used in production. But, it's a good way to see the Drive API in use.
+This is a simple site I created using DoorDash's Drive API. The code is a bit rough-and-ready, as it is not at a place to be used in production. But, it's a good way to see the Drive API in action.
 
 There are, I'm sure, about a million edge-cases to be discovered. There is no MVC or OOP to be found (yet), and I am no designer - you have been warned.
 
