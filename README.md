@@ -11,6 +11,9 @@ Say you are a cafe owner with two stores. At your main store, you are hit with a
 
 So, what this app does is connects the business to DoorDash's Drive API, and allows the store to select from pre-determined items. Then, a DoorDash Dasher will be assigned to pick up the items from one store, and deliver them where they are needed.
 
+![Screenshot 2024-01-22 2 45 41 PM](https://github.com/jamespeeler/business-branch-delivery-service/assets/44689036/d63cba6a-e5c7-4a01-8542-b61389712622)
+
+See! Super simple.
 
 ## Usage
 
